@@ -24,12 +24,28 @@
 #include "usb.h"
 #include "oled.h"
 #include "buttons.h"
+#if EMULATOR
+#include "usb.h"
+#else
+#include "timer.h"
+#endif
 #include "pinmatrix.h"
 #include "fsm.h"
 #include "layout2.h"
 #include "util.h"
 #include "gettext.h"
 #include "memzero.h"
+
+#if !EMULATOR
+void wait_ms(uint32_t millis) {
+	uint32_t start = timer_ms();
+	while ((timer_ms() - start) < millis) {
+		delay(10);
+	}
+}
+#else
+#define wait_ms usbSleep
+#endif
 
 #define MAX_WRONG_PINS 15
 
@@ -119,6 +135,21 @@ const char *requestPin(PinMatrixRequestType type, const char *text)
 	msg_write(MessageType_MessageType_PinMatrixRequest, &resp);
 	pinmatrix_start(text);
 	for (;;) {
+
+		for(int i=0;i<=3600;i++) {
+				wait_ms(50);
+				buttonUpdate();
+
+				if(i==3600)
+				{
+					msg_tiny_id = MessageType_MessageType_Cancel;
+				}
+
+				if ((button.YesUp||button.NoUp)) {
+					i=3600;
+				}
+		}
+
 		usbPoll();
 		if (msg_tiny_id == MessageType_MessageType_PinMatrixAck) {
 			msg_tiny_id = 0xFFFF;
