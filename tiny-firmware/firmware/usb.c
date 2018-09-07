@@ -33,7 +33,7 @@
 #define ENDPOINT_ADDRESS_OUT        (0x01)
 
 #define USB_STRINGS \
-	X(MANUFACTURER, "Skycoin Fundation") \
+	X(MANUFACTURER, "Skycoin Foundation") \
 	X(PRODUCT, "TREZOR") \
 	X(SERIAL_NUMBER, storage_uuid_str) \
 	X(INTERFACE_MAIN,  "TREZOR Interface") 

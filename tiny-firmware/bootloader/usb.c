@@ -150,7 +150,7 @@ static const struct usb_config_descriptor config = {
 };
 
 static const char *usb_strings[] = {
-	"Skycoin Fundation",
+	"Skycoin Foundation",
 	"TREZOR",
 	"", // empty serial
 };
